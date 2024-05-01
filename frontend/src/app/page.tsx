@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+import { Button } from "@/components/ui/button"
+
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +51,7 @@ export default function Home() {
           placeholder="Password"
           required
         />
-        <button type="submit">SIGN UP</button>
+        <Button type="submit">SIGN UP</Button>
       </form>
     </div>
   );
