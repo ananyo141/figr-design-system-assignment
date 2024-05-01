@@ -1,0 +1,30 @@
+## NOTE: use with `docker compose -f compose.yml -f prod.compose.yml up -d`
+services:
+  backend:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    container_name: design-prod
+    depends_on:
+      - design-db
+    networks:
+      - design-network
+
+  kmc-db:
+    image: mongo:latest
+    networks:
+      - design-network
+    container_name: design-db-prod
+    volumes:
+      - db-data:/data/db
+
+networks:
+  design-network:
+
+volumes:
+  db-data:
