@@ -1,58 +1,92 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
+import { Link } from "lucide-react";
+import { ProjectDialog } from "@/components/ProjectDialog";
 
-import { Button } from "@/components/ui/button"
+const Home = () => {
+  const [projects, setProjects] = useState<any>([]);
+  const [projectName, setProjectName] = useState("");
 
-export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+  const handleCreateProject = async () => {
+    if (!projectName) {
+      toast({
+        title: "⛔ Project needs a name.",
+        description: "Please try again.",
+      });
+      return;
+    }
 
     try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "⛔ Something went wrong.",
+        description: "Please try again.",
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Signup successful!");
-        // Handle success, like redirecting to a different page
-      } else {
-        toast.error(data.message || "Signup failed. Please try again later.");
-      }
-    } catch (error) {
-      toast.error("An error occurred. Please try again later.");
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const projectsData = await getUserProjects("projects");
+        // setProjects(projectsData.data.data);
+      } catch (err) {
+        console.error(err);
+        toast({
+          title: "⛔ Something went wrong while fetching projects.",
+          description: "Please try again.",
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <Button type="submit">SIGN UP</Button>
-      </form>
+      <main className="container mx-auto py-8">
+        <div className="mb-4">
+          <ProjectDialog
+            projectName={projectName}
+            setProjectName={setProjectName}
+            handleCreateProject={handleCreateProject}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 gap-4">
+          {projects &&
+            projects.map((project: any) => (
+              <Link to={`/project/${project._id}`} key={project._id}>
+                <Card
+                  className="bg-white shadow-md p-10"
+                  style={{
+                    borderRadius:
+                      project.radius.baseSize * project.radius.multiplier,
+                  }}
+                >
+                  <CardHeader className="text-xl font-bold mb-6 p-0">
+                    {project.name}
+                  </CardHeader>
+                  <CardDescription>
+                    {project.colors.map((color, index) => (
+                      <span
+                        key={index}
+                        className="inline-block rounded-full h-4 w-4 mr-2"
+                        style={{ backgroundColor: color.value }}
+                      />
+                    ))}
+                  </CardDescription>
+                </Card>
+              </Link>
+            ))}
+        </div>
+      </main>
     </div>
   );
-}
+};
+
+export default Home;
