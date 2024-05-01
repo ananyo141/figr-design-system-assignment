@@ -7,7 +7,6 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
-import http from 'http';
 import morgan from 'morgan';
 
 import { nodeEnv, origin, port } from '@constants/exportEnv.constant';
@@ -15,37 +14,11 @@ import { nodeEnv, origin, port } from '@constants/exportEnv.constant';
 import { initDb } from '@database/connect.database';
 import { errorHandler } from '@middlewares/errorHandler';
 import { routeNotFound } from '@middlewares/routeNotFound';
-import { verifySocketToken } from '@middlewares/socketAuth';
 import logger from '@utils/logger';
-import { healthCheckBody } from '@utils/message/successMessage';
-import { initMail } from '@utils/sendMail';
-import { initBucket } from '@utils/uploadToBucket';
-import { Server } from 'socket.io';
 import router from './routes';
-import { UserType } from '@models/user';
+import { httpResponse } from '@utils/httpResponse';
 
-export const app = express();
-export const server = http.createServer(app);
-
-export const io = new Server(server, {
-  cors: {
-    origin,
-  },
-});
-
-io.use(verifySocketToken).on('connection', (socket) => {
-  logger.debug('id -> ', socket.data.userId);
-  logger.info(`New ${socket.data.role} connected: ${socket.data.userId}`);
-  if (socket.data.role === UserType.ADMIN) {
-    socket.join('admin');
-  }
-  socket.on('disconnect', () => {
-    if (socket.data.role === UserType.ADMIN) {
-      socket.leave('admin');
-    }
-    logger.info('Client disconnected');
-  });
-});
+const app = express();
 
 const establishDatabaseConnection = async (): Promise<void> => {
   try {
@@ -69,21 +42,20 @@ function initMiddleware(): void {
 }
 
 function initRouter(): void {
-  app.get('/healthCheck', (_, res) => {
-    res.json(healthCheckBody(port));
-  });
-
   app.use('/', router());
+  app.get('/', (_, res) => {
+    res.json(httpResponse(true, 'Server is running'));
+  });
   app.use(routeNotFound);
   app.use(errorHandler);
 }
 
 function initServer(): void {
-  server.listen(port, () => {
+  app.listen(port, () => {
     logger.info(`Server is running at http://localhost:${port}`);
     logger.info(`Server started In ENV: ${nodeEnv}`);
   });
-  server.on('error', onError);
+  app.on('error', onError);
 }
 
 export async function init(): Promise<void> {
@@ -98,8 +70,6 @@ export async function init(): Promise<void> {
 
     initServer();
     await establishDatabaseConnection();
-    await initBucket();
-    initMail();
   } catch (err: ErrorType) {
     logger.error('Unable to initialize app: ', err.message);
     logger.error(err);
@@ -125,11 +95,9 @@ function onError(error: any): void {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }

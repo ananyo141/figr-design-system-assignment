@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 
 if (process.env.NODE_ENV === 'development') {
   console.info('Using .env.docker');
-  config({ path: '.env.docker' });
+  config();
 } else if (process.env.NODE_ENV === 'test') {
   console.info('Using .env.test');
   config({ path: '.env.test' });
