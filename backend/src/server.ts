@@ -6,7 +6,6 @@ import {
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
-import fs from 'fs';
 import morgan from 'morgan';
 
 import { nodeEnv, origin, port } from '@constants/exportEnv.constant';
@@ -60,9 +59,6 @@ function initServer(): void {
 
 export async function init(): Promise<void> {
   try {
-    if (!fs.existsSync('uploads')) {
-      fs.mkdirSync('uploads');
-    }
     logger.info('init');
     initMiddleware();
     initRouter();
