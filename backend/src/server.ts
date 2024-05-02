@@ -72,7 +72,7 @@ export default async function init(): Promise<void> {
   }
 }
 
-// init();
+init();
 
 /**
  * Event listener for HTTP server "error" event.
