@@ -5,7 +5,6 @@ const tslib_1 = require("tslib");
 const compression_1 = tslib_1.__importDefault(require("compression"));
 const cors_1 = tslib_1.__importDefault(require("cors"));
 const express_1 = tslib_1.__importDefault(require("express"));
-const fs_1 = tslib_1.__importDefault(require("fs"));
 const morgan_1 = tslib_1.__importDefault(require("morgan"));
 const exportEnv_constant_1 = require("./constants/exportEnv.constant");
 const connect_database_1 = require("./database/connect.database");
@@ -50,9 +49,6 @@ function initServer() {
 }
 async function init() {
     try {
-        if (!fs_1.default.existsSync('uploads')) {
-            fs_1.default.mkdirSync('uploads');
-        }
         logger_1.default.info('init');
         initMiddleware();
         initRouter();
