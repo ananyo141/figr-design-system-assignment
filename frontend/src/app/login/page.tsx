@@ -1,24 +1,51 @@
-"use client"
+"use client";
 
-import Link from 'next/link';
-import React, { useState } from 'react';
+import { toast } from "@/components/ui/use-toast";
+import { loginUser } from "@/network/userApi";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleLogin = (e:any) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     // Implement your login logic here
-    console.log('Logging in with:', email, password);
+    const response = await loginUser({
+      email: email,
+      password: password,
+    });
+    if (response.success === true) {
+      console.log("Login successful");
+      toast({
+        title: "Login successful",
+        description: "You are now logged in",
+      });
+      router.push("/projects");
+    } else {
+      console.error("Login failed");
+      toast({
+        title: "Login failed",
+        description: response.message,
+      });
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-xs">
-        <form onSubmit={handleLogin} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form
+          onSubmit={handleLogin}
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        >
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -31,7 +58,10 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -50,7 +80,10 @@ const Login = () => {
             >
               Sign In
             </button>
-            <Link href="/signup" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+            <Link
+              href="/signup"
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            >
               Sign Up
             </Link>
           </div>

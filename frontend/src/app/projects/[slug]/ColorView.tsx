@@ -8,25 +8,35 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { generateHexColorCode } from "@/lib/utils";
+import { generateHexColorCode } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { updateProject } from "@/network/projectsApi";
+import { toast } from "@/components/ui/use-toast";
 
-const ColorsTab = ({ colors, setColors, selectedColor, setSelectedColor }) => {
-  // const { id } = useParams();
-  const { id } = { id: "1" };
-  const { updateProject } = { updateProject: async () => {} };
+interface Color {
+  _id: string;
+  label: string;
+  value: string;
+}
 
+const ColorsTab = ({
+  id,
+  colors,
+  setColors,
+  selectedColor,
+  setSelectedColor,
+}) => {
   const handleColorValueChange = ({ id, hexValue }) => {
-    setColors((prevState) => {
-      let updatedColor = [];
+    setColors((prevState: Color[]) => {
+      let updatedColor: Color[] = [];
       prevState.forEach(({ _id, value, label }) => {
-        let color = {};
+        let color: Color;
         if (_id === id) {
           color = { _id, label, value: hexValue };
         } else {
           color = { _id, value, label };
         }
-        // updatedColor.push(color as any);
+        updatedColor.push(color);
       });
       return [...updatedColor];
     });
@@ -34,16 +44,16 @@ const ColorsTab = ({ colors, setColors, selectedColor, setSelectedColor }) => {
   };
 
   const handleColorVariableNameChange = ({ id, varibleName }) => {
-    setColors((prevState) => {
-      let updatedColor = [];
+    setColors((prevState: Color[]) => {
+      let updatedColor: Color[] = [];
       prevState.forEach(({ _id, value, label }) => {
-        let color = {};
+        let color: Color;
         if (_id === id) {
           color = { _id, label: varibleName, value };
         } else {
           color = { _id, value, label };
         }
-        // updatedColor.push(color);
+        updatedColor.push(color);
       });
       return [...updatedColor];
     });
@@ -51,22 +61,29 @@ const ColorsTab = ({ colors, setColors, selectedColor, setSelectedColor }) => {
   };
 
   const handleAddColor = async () => {
-    setColors((prevState) => {
-      let colors = prevState;
+    setColors((prevState: Color[]) => {
+      let colors: Partial<Color>[] = prevState;
       colors.push({
         label: `Color ${colors.length + 1}`,
-        // value: generateHexColorCode(),
-        value: "#000000",
+        value: generateHexColorCode(),
       });
       return colors;
     });
     setSelectedColor(colors[colors.length - 1]);
 
     try {
-      // const response = await updateProject(`projects/${id}`, {
-      //   colors: colors,
-      // });
-      // setColors(response.data.data.colors);
+      const response = await updateProject(id, {
+        colors: colors,
+      });
+      if (response.data.success === true) {
+        setColors(response.data.colors);
+      } else {
+        console.error(response.message);
+        toast({
+          title: "Failed to add color",
+          description: response.message,
+        });
+      }
     } catch (err) {
       console.error(err);
     }

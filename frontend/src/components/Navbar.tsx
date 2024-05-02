@@ -1,6 +1,14 @@
+"use client";
+
+import { TOKEN_COOKIE } from "@/network/constants";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 
 const Navbar = () => {
+  const handleLogout = () => {
+    deleteCookie(TOKEN_COOKIE);
+  };
+
   return (
     <nav className="bg-gray-800 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,9 +27,10 @@ const Navbar = () => {
                 {/* Primary navigation items */}
                 <Link
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  href="/about"
+                  onClick={handleLogout}
+                  href="/login"
                 >
-                  About
+                  Logout
                 </Link>
               </div>
             </div>

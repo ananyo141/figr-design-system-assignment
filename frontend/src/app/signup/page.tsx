@@ -1,9 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { signupUser } from "@/network/userApi";
 import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
 import React, { useState } from "react";
 
 const SignUp = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,10 +25,28 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Implement your sign up logic here
-    console.log("Form Data Submitted:", formData);
+    const response = await signupUser({
+      email: formData.email,
+      password: formData.password,
+      name: formData.firstName + ' ' + formData.lastName,
+    });
+    if (response.success === true) {
+      console.log("Sign up successful");
+      toast({
+        title: "Sign up successful",
+        description: "You can now login",
+      })
+      router.push("/login");
+    } else {
+      console.error("Sign up failed");
+      toast({
+        title: "Sign up failed",
+        description: response.message,
+      })
+    }
   };
 
   return (

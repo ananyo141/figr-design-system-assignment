@@ -1,45 +1,45 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+
 import ColorsTab from "./ColorView";
 import SpacingTab from "./SpaceView";
 import { useEffect, useState } from "react";
-import { toast } from "@/components/ui/use-toast";
 import RadiusTab from "./RadiusView";
 import ComponentTab from "./ComponentView";
-import { Button } from "@/components/ui/button";
+
+import { getProjectById, updateProject } from "@/network/projectsApi";
 
 export default function Project({ params }) {
   const id = params.slug;
-  const [project, setProject] = useState(null);
-  const [colors, setColors] = useState(null);
+  const [project, setProject] = useState([]);
+  const [colors, setColors] = useState([]);
   const [enums, setEnums] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSpacingSize, setSelectedSpacingSize] = useState(null);
   const [selectedRadiusSize, setSelectedRadiusSize] = useState(null);
   const [isAutosaving, setIsAutoSaving] = useState(false);
-  // const { getProjectById, updateProject } = useContext(AxiosContext);
 
   useEffect(() => {
     const updateData = async () => {
+      setIsAutoSaving(true);
       try {
-        // setIsAutoSaving(true);
-        // const projectDataToUpdate = {
-        //   colors,
-        //   radius: selectedRadiusSize,
-        //   spacing: { baseSize: selectedSpacingSize },
-        // };
-        // const {
-        //   data: { data },
-        // } = await updateProject(id, projectDataToUpdate);
-        // setProject(data);
-        // setIsAutoSaving(false);
+        const projectDataToUpdate = {
+          colors,
+          radius: selectedRadiusSize,
+          spacing: { baseSize: selectedSpacingSize },
+        };
+        const { data } = await updateProject(id, projectDataToUpdate);
+        setProject(data);
       } catch (err) {
-        setIsAutoSaving(false);
         toast({
           title: "Something went wrong while autosaving.",
         });
         console.error(err);
+      } finally {
+        setIsAutoSaving(false);
       }
     };
 
@@ -48,26 +48,18 @@ export default function Project({ params }) {
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [
-    selectedRadiusSize,
-    colors,
-    selectedSpacingSize,
-    id,
-    // updateProject
-  ]);
+  }, [selectedRadiusSize, colors, selectedSpacingSize, id]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const {
-        //   data: { data },
-        // } = await getProjectById(`projects/${id}`);
-        // setProject(data.project);
-        // setColors(data.project.colors);
-        // setEnums(data.enums);
-        // setSelectedSpacingSize(data.project.spacing.baseSize);
-        // setSelectedRadiusSize(data.project.radius);
-        // setSelectedColor(data.project.colors[0]);
+        const { data } = await getProjectById(id);
+        setProject(data.project);
+        setColors(data.project.colors);
+        setEnums(data.enums);
+        setSelectedSpacingSize(data.project.spacing.baseSize);
+        setSelectedRadiusSize(data.project.radius);
+        setSelectedColor(data.project.colors[0]);
       } catch (err) {
         console.error(err);
         toast({
@@ -94,20 +86,34 @@ export default function Project({ params }) {
   }, []);
 
   const handleSaveProject = async () => {
-    // setIsAutoSaving(true);
-    // const projectDataToUpdate = {
-    //   colors,
-    //   radius: selectedRadiusSize,
-    //   spacing: { baseSize: selectedSpacingSize },
-    // };
-    // const {
-    //   data: { data },
-    // } = await updateProject(`projects/${id}`, projectDataToUpdate);
-    // setProject(data);
-    // setIsAutoSaving(false);
-    // toast({
-    //   title: "✅ Project data saved.",
-    // });
+    setIsAutoSaving(true);
+    const projectDataToUpdate = {
+      colors,
+      radius: selectedRadiusSize,
+      spacing: { baseSize: selectedSpacingSize },
+    };
+    try {
+      const response = await updateProject(id, projectDataToUpdate);
+      if (response.success === true) {
+        setProject(response.data);
+        toast({
+          title: "Success!",
+          description: "Project data saved successfully"
+        });
+      } else {
+        toast({
+          title: response.message,
+          description: "Please try again.",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Something went wrong while saving project.",
+      });
+    } finally {
+      setIsAutoSaving(false);
+    }
   };
 
   return (
@@ -129,6 +135,7 @@ export default function Project({ params }) {
           </TabsList>
           <TabsContent value="color" className="grid grid-cols-4 gap-4">
             <ColorsTab
+              id={id}
               project={project}
               setProject={setProject}
               colors={colors}
