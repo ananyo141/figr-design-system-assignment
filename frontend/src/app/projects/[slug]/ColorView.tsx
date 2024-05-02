@@ -112,12 +112,6 @@ const ColorsTab = ({
         <Card className="w-1/2 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between bg-gray-100 p-2 rounded-t">
             <CardTitle className="font-semibold">Colors</CardTitle>
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white rounded p-1"
-              onClick={handleAddColor}
-            >
-              Add Color
-            </Button>
           </CardHeader>
           <ScrollArea className="h-[400px]">
             <CardContent className="space-y-1 p-2">
@@ -174,6 +168,12 @@ const ColorsTab = ({
               </Accordion>
             </CardContent>
           </ScrollArea>
+            <Button
+              className="bg-blue-800 w-full mt-2 hover:bg-blue-600 text-white rounded p-1"
+              onClick={handleAddColor}
+            >
+              Add Color
+            </Button>
         </Card>
       </motion.div>
       <motion.div

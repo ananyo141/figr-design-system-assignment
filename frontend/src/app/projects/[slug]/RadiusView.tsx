@@ -39,7 +39,7 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
     >
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Radius Configuration</CardTitle>
+          <CardTitle>Radius</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col justify-start p-4">
           <div className="mb-4">

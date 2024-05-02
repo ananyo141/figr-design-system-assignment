@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
@@ -12,6 +13,18 @@ import ComponentTab from "./ComponentView";
 
 import { getProjectById, updateProject } from "@/network/projectsApi";
 
+// Define the animation: a continuous rotation
+const spinTransition = {
+  loop: Infinity, // Loop the animation forever
+  ease: "linear", // Linear animation gives the constant spin effect
+  duration: 1, // Time in seconds for one complete spin
+};
+
+const spinVariant = {
+  animate: {
+    rotate: 360, // Rotate the element 360 degrees
+  },
+};
 export default function Project({ params }) {
   const id = params.slug;
   const [project, setProject] = useState([]);
@@ -123,14 +136,22 @@ export default function Project({ params }) {
           <p className="text-2xl font-bold">Current Project: {project?.name}</p>
           <div className="flex items-center gap-4">
             {isAutosaving ? (
-              <div className="text-sm italic text-blue-500">Auto Saving...</div>
+              <div className="flex justify-center items-center">
+                <motion.span
+                  className="loader"
+                  style={{
+                    border: "4px solid #e9e9e9",
+                    borderTop: "4px solid #3498db",
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                  variants={spinVariant}
+                  animate="animate"
+                  transition={spinTransition}
+                />
+              </div>
             ) : null}
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow"
-              onClick={handleSaveProject}
-            >
-              Save Project
-            </Button>
           </div>
         </div>
         <Tabs defaultValue="color">
@@ -193,6 +214,12 @@ export default function Project({ params }) {
             />
           </TabsContent>
         </Tabs>
+        <Button
+          className="bg-blue-600 ml-4 hover:bg-blue-700 text-white font-semibold p-4 rounded shadow"
+          onClick={handleSaveProject}
+        >
+          Save
+        </Button>
       </div>
     </div>
   );

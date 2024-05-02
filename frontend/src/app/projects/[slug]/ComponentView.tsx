@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import {
   Select,
@@ -16,6 +16,14 @@ import { Input } from "@/components/ui/input";
 import EditComponentStyle from "./ComponentStyleView";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
+
+const buttonSizes = {
+  sm: "px-2 py-1 text-sm",
+  md: "px-4 py-2 text-base",
+  lg: "px-6 py-3 text-lg",
+  xl: "px-8 py-3 text-xl",
+  "2xl": "px-10 py-4 text-2xl",
+};
 
 const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
   const [selectedComponent, setSelectedComponent] = useState("Button");
@@ -35,16 +43,15 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
   return (
     <>
       <Card className="col-span-1">
-        <CardContent className="p-0 h-[400px]">
+        <CardTitle className="p-4">Components</CardTitle>
+        <CardContent className="py-4 h-[400px]">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className={`space-y-1 p-4 cursor-pointer ${
-              selectedComponent === "Button"
-                ? "bg-blue-500 text-white font-medium"
-                : ""
+              selectedComponent === "Button" ? "text-blue-700" : ""
             }`}
             onClick={() => setSelectedComponent("Button")}
           >
@@ -53,20 +60,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
           <hr />
           <div
             className={`space-y-1 p-4 cursor-pointer ${
-              selectedComponent === "Input-Text"
-                ? "bg-blue-500 text-white font-medium"
-                : ""
-            }`}
-            onClick={() => setSelectedComponent("Input-Text")}
-          >
-            Input-Text
-          </div>
-          <hr />
-          <div
-            className={`space-y-1 p-4 cursor-pointer ${
-              selectedComponent === "Radio"
-                ? "bg-blue-500 text-white font-medium"
-                : ""
+              selectedComponent === "Radio" ? "text-blue-700" : ""
             }`}
             onClick={() => setSelectedComponent("Radio")}
           >
@@ -75,9 +69,16 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
           <hr />
           <div
             className={`space-y-1 p-4 cursor-pointer ${
-              selectedComponent === "Checkbox"
-                ? "bg-blue-500 text-white font-medium"
-                : ""
+              selectedComponent === "Select" ? "text-blue-700" : ""
+            }`}
+            onClick={() => setSelectedComponent("Select")}
+          >
+            Select
+          </div>
+          <hr />
+          <div
+            className={`space-y-1 p-4 cursor-pointer ${
+              selectedComponent === "Checkbox" ? "text-blue-700" : ""
             }`}
             onClick={() => setSelectedComponent("Checkbox")}
           >
@@ -86,13 +87,11 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
           <hr />
           <div
             className={`space-y-1 p-4 cursor-pointer ${
-              selectedComponent === "Select"
-                ? "bg-blue-500 text-white font-medium"
-                : ""
+              selectedComponent === "Input-Text" ? "text-blue-700" : ""
             }`}
-            onClick={() => setSelectedComponent("Select")}
+            onClick={() => setSelectedComponent("Input-Text")}
           >
-            Select
+            Input
           </div>
           <hr />
         </CardContent>
@@ -115,12 +114,19 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                     key={idx}
                     className="mb-8 grid grid-cols-3 gap-4 items-center"
                   >
-                    <Button
-                      style={component}
-                      className="w-40 active:scale-90 duration-100 transition col-span-1"
-                    >
-                      {component.label}
-                    </Button>
+                    <div>
+                      {Object.entries(buttonSizes).map(
+                        ([size, sizeClass], index) => (
+                          <Button
+                            key={size}
+                            style={component}
+                            className={`active:scale-90 duration-100 transition col-span-1 ${sizeClass}`}
+                          >
+                            {`${component.label} Button ${size.toUpperCase()}`}
+                          </Button>
+                        ),
+                      )}
+                    </div>
                     <div className="col-span-2 px-4">
                       <EditComponentStyle
                         type="button"
