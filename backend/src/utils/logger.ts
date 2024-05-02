@@ -1,11 +1,5 @@
-import { logDir as LogDirectory, nodeEnv } from '@constants/exportEnv.constant';
-import { resolve } from 'path';
+import { nodeEnv } from '@constants/exportEnv.constant';
 import winston from 'winston';
-
-const logDir =
-  nodeEnv === 'production'
-    ? resolve('./', LogDirectory ?? 'logs')
-    : resolve('../../', LogDirectory ?? 'logs');
 
 const logFormat = winston.format.printf(
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
