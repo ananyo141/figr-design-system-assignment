@@ -13,11 +13,11 @@ import { generateRadiusVariables } from "@/lib/utils";
 const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
   const sizeVariables = generateRadiusVariables(selectedRadiusSize);
 
-  const handleRaidusBaseSizeChange = (value) => {
+  const handleRadiusBaseSizeChange = (value) => {
     setSelectedRadiusSize({ ...selectedRadiusSize, baseSize: value });
   };
 
-  const handleRaidusMultiplierSizeChange = (value) => {
+  const handleRadiusMultiplierSizeChange = (value) => {
     setSelectedRadiusSize({ ...selectedRadiusSize, multiplier: value });
   };
 
@@ -25,51 +25,45 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
     <>
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Radius</CardTitle>
+          <CardTitle>Radius Configuration</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1 h-[400px]">
-          <div className="mb-6">
-            <Label htmlFor="name">Select base size</Label>
+        <CardContent className="flex flex-col justify-start p-4">
+          <div className="mb-4">
+            <Label htmlFor="baseSizeSelect">Select base size</Label>
             <Select
-              onValueChange={(value) => {
-                handleRaidusBaseSizeChange(value);
-              }}
+              onValueChange={handleRadiusBaseSizeChange}
+              id="baseSizeSelect"
             >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={selectedRadiusSize.baseSize} />
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={selectedRadiusSize.baseSize.toString()} />
               </SelectTrigger>
               <SelectContent>
-                {enums &&
-                  enums?.radiusBaseSize.map((size, idx) => {
-                    return (
-                      <SelectItem value={size} key={idx}>
-                        {size}
-                      </SelectItem>
-                    );
-                  })}
+                {enums && enums.radiusBaseSize.map((size, idx) => (
+                  <SelectItem value={size} key={idx}>
+                    {size}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <Label htmlFor="name">Select multiplier size</Label>
-          <Select
-            onValueChange={(value) => {
-              handleRaidusMultiplierSizeChange(value);
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={selectedRadiusSize.multiplier} />
-            </SelectTrigger>
-            <SelectContent>
-              {enums &&
-                enums?.radiusMultiplier.map((size, idx) => {
-                  return (
-                    <SelectItem value={size} key={idx}>
-                      {size}
-                    </SelectItem>
-                  );
-                })}
-            </SelectContent>
-          </Select>
+          <div>
+            <Label htmlFor="multiplierSizeSelect">Select multiplier size</Label>
+            <Select
+              onValueChange={handleRadiusMultiplierSizeChange}
+              id="multiplierSizeSelect"
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={selectedRadiusSize.multiplier.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                {enums && enums.radiusMultiplier.map((size, idx) => (
+                  <SelectItem value={size} key={idx}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
       <Card className="col-span-3">

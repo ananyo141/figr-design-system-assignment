@@ -29,37 +29,7 @@ function generateSpacingVariables(base) {
 
   return sizes;
 }
-function generateRadiusVariables({ baseSize, multiplier }) {
-  let sizes;
-  if (multiplier === 1) {
-    sizes = {
-      xs: 1,
-      s: 1,
-      md: 1,
-      lg: 1,
-      xl: 1,
-    };
-  } else {
-    sizes = {
-      xs: multiplier * 0.5,
-      s: multiplier,
-      md: multiplier * 1.5,
-      lg: multiplier * 2,
-      xl: multiplier * 3,
-    };
-  }
 
-  let sizeVariables = [] as any;
-
-  for (const key in sizes) {
-    sizeVariables.push({
-      name: key,
-      size: Math.round(baseSize * sizes[key]),
-    });
-  }
-
-  return sizeVariables;
-}
 const SpacingTab = ({ enums, selectedSpacingSize, setSelectedSpacingSize }) => {
   const sizeVariables = generateSpacingVariables(selectedSpacingSize);
 
@@ -69,25 +39,25 @@ const SpacingTab = ({ enums, selectedSpacingSize, setSelectedSpacingSize }) => {
 
   return (
     <>
-      <Card className="col-span-1">
-        <CardHeader>
-          <CardTitle>Spacing</CardTitle>
+      <Card className="col-span-1 shadow-lg">
+        <CardHeader className="p-2 rounded-t">
+          <CardTitle className="text">Spacing</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1 h-[400px]">
-          <Label htmlFor="name">Select base size</Label>
+        <CardContent className="space-y-1 h-[400px] p-4">
+          <Label htmlFor="name" className="text-lg">Select base size</Label>
           <Select
             onValueChange={(value) => {
               handleBaseSizeChange(value);
             }}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] bg-gray-100 p-2 rounded">
               <SelectValue placeholder={selectedSpacingSize} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white border border-gray-200 rounded shadow-lg">
               {enums &&
                 enums?.spacingBaseSize.map((size, idx) => {
                   return (
-                    <SelectItem value={size} key={idx}>
+                    <SelectItem value={size} key={idx} className="p-2 hover:bg-gray-100">
                       {size}
                     </SelectItem>
                   );
@@ -96,7 +66,7 @@ const SpacingTab = ({ enums, selectedSpacingSize, setSelectedSpacingSize }) => {
           </Select>
         </CardContent>
       </Card>
-      <Card className="col-span-3">
+      <Card className="col-span-3 shadow-lg">
         <VariableTable sizeVariables={sizeVariables} />
       </Card>
     </>

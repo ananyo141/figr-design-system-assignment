@@ -98,7 +98,7 @@ export default function Project({ params }) {
         setProject(response.data);
         toast({
           title: "Success!",
-          description: "Project data saved successfully"
+          description: "Project data saved successfully",
         });
       } else {
         toast({
@@ -120,18 +120,45 @@ export default function Project({ params }) {
     <div>
       <div className="w-10/12 mx-auto mt-10">
         <div className="mb-4 flex justify-between items-center">
-          <p className="text-2xl font-bold">{project?.name}</p>
+          <p className="text-2xl font-bold">Current Project: {project?.name}</p>
           <div className="flex items-center gap-4">
-            <p>{isAutosaving ? "Saving..." : ""}</p>
-            <Button onClick={handleSaveProject}>Save Project</Button>
+            {isAutosaving ? (
+              <div className="text-sm italic text-blue-500">Auto Saving...</div>
+            ) : null}
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow"
+              onClick={handleSaveProject}
+            >
+              Save Project
+            </Button>
           </div>
         </div>
         <Tabs defaultValue="color">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-500 text-white">
-            <TabsTrigger value="color">Color</TabsTrigger>
-            <TabsTrigger value="spacing">Spacing</TabsTrigger>
-            <TabsTrigger value="radius">Radius</TabsTrigger>
-            <TabsTrigger value="component">Component</TabsTrigger>
+          <TabsList className="flex space-x-1 bg-slate-200 rounded-lg p-1">
+            <TabsTrigger
+              value="color"
+              className="flex-1 text-center py-2 rounded-lg font-medium text-sm cursor-pointer hover:bg-slate-300 focus:outline-none focus:bg-slate-400"
+            >
+              Color
+            </TabsTrigger>
+            <TabsTrigger
+              value="spacing"
+              className="flex-1 text-center py-2 rounded-lg font-medium text-sm cursor-pointer hover:bg-slate-300 focus:outline-none focus:bg-slate-400"
+            >
+              Spacing
+            </TabsTrigger>
+            <TabsTrigger
+              value="radius"
+              className="flex-1 text-center py-2 rounded-lg font-medium text-sm cursor-pointer hover:bg-slate-300 focus:outline-none focus:bg-slate-400"
+            >
+              Radius
+            </TabsTrigger>
+            <TabsTrigger
+              value="component"
+              className="flex-1 text-center py-2 rounded-lg font-medium text-sm cursor-pointer hover:bg-slate-300 focus:outline-none focus:bg-slate-400"
+            >
+              Component
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="color" className="grid grid-cols-4 gap-4">
             <ColorsTab

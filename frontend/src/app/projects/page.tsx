@@ -97,7 +97,6 @@ const Home = () => {
                           >
                             <span
                               className="opacity-0 hover:opacity-100 absolute text-xs text-white bg-black bg-opacity-75 rounded px-2 py-1 transition-opacity duration-300 ease-in-out"
-                              // style={{ bottom: "calc(100% + 0.5rem)" }}
                             >
                               {color.label || color.value}
                             </span>
