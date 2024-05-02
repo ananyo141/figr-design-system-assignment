@@ -1,22 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { getUserProjects, createProject } from "@/network/projectsApi";
 import { useRouter } from "next/navigation";
+import { CustomDialog } from "./CustomDialog";
 
 const Home = () => {
   const [projects, setProjects] = useState<any>(null);
@@ -41,7 +31,7 @@ const Home = () => {
         router.push(`/projects/${response.data._id}`);
       } else {
         toast({
-          title:response.message,
+          title: response.message,
           description: JSON.stringify(response.data, null, 2),
         });
       }
@@ -58,7 +48,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const projectsData = await getUserProjects();
-        console.log(projectsData)
+        console.log(projectsData);
         setProjects(projectsData.data);
       } catch (err) {
         console.error(err);
@@ -76,7 +66,7 @@ const Home = () => {
     <div>
       <main className="container mx-auto py-8">
         <div className="mb-4">
-          <ProjectDialog
+          <CustomDialog
             projectName={projectName}
             setProjectName={setProjectName}
             handleCreateProject={handleCreateProject}
@@ -98,13 +88,23 @@ const Home = () => {
                     {project.name}
                   </CardHeader>
                   <CardDescription>
-                    {project.colors.map((color, index) => (
-                      <span
-                        key={index}
-                        className="inline-block rounded-full h-4 w-4 mr-2"
-                        style={{ backgroundColor: color.value }}
-                      />
-                    ))}
+                    <div className="flex flex-wrap z-50">
+                      {project.colors.map((color: any, index: number) => (
+                        <div key={`project-color-${index}`} className="p-1">
+                          <div
+                            className="w-8 h-8 rounded-sm cursor-pointer hover:scale-125 transform transition duration-300 ease-in-out flex items-center justify-center relative"
+                            style={{ backgroundColor: color.value }}
+                          >
+                            <span
+                              className="opacity-0 hover:opacity-100 absolute text-xs text-white bg-black bg-opacity-75 rounded px-2 py-1 transition-opacity duration-300 ease-in-out"
+                              // style={{ bottom: "calc(100% + 0.5rem)" }}
+                            >
+                              {color.label || color.value}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </CardDescription>
                 </Card>
               </Link>
@@ -114,40 +114,5 @@ const Home = () => {
     </div>
   );
 };
-
-function ProjectDialog({ projectName, setProjectName, handleCreateProject }) {
-  return (
-    <Dialog>
-      <div className="w-full flex justify-end">
-        <DialogTrigger asChild>
-          <Button>Create Project</Button>
-        </DialogTrigger>
-      </div>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Create a new Project</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-2">
-          <div className="grid grid-cols-6 items-center gap-4 px-2">
-            <Label htmlFor="name" className="text-right col-span-2">
-              Project Name*
-            </Label>
-            <Input
-              value={projectName}
-              id="name"
-              className="col-span-4"
-              onChange={(e) => {
-                setProjectName(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button onClick={handleCreateProject}>Create</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
 
 export default Home;
