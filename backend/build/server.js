@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
 const tslib_1 = require("tslib");
 const compression_1 = tslib_1.__importDefault(require("compression"));
 const cors_1 = tslib_1.__importDefault(require("cors"));
@@ -62,7 +61,7 @@ async function init() {
         logger_1.default.error(err);
     }
 }
-exports.init = init;
+exports.default = init;
 init();
 /**
  * Event listener for HTTP server "error" event.

@@ -57,7 +57,7 @@ function initServer(): void {
   app.on('error', onError);
 }
 
-export async function init(): Promise<void> {
+export default async function init(): Promise<void> {
   try {
     logger.info('init');
     initMiddleware();
