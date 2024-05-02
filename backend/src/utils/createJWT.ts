@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 
-const JWT_USER_KEY = process.env.JWT_USER_KEY;
+const JWT_USER_KEY = process.env.JWT_KEY;
 
 export interface TokenPayloadType {
   userId: string;

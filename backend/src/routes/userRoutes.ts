@@ -12,19 +12,17 @@ import { userSchema, loginSchema } from '@schema/userSchema';
 
 export default (router: Router): void => {
   router.post(
-    '/login',
-    verifyUserToken,
+    '/user/login',
     validateSchema(loginSchema.strict()),
     loginUser
   );
   router.post(
-    '/register',
-    verifyUserToken,
+    '/user/register',
     validateSchema(userSchema.strict()),
     registerUser
   );
   router
-    .route('/:id')
+    .route('/user/:id')
     .patch(verifyUserToken, validateSchema(userSchema.partial()), updateProfile)
     .get(verifyUserToken, getProfile);
 };
