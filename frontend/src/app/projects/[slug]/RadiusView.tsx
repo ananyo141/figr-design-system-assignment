@@ -46,7 +46,7 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
             <Label htmlFor="baseSizeSelect">Select base size</Label>
             <Select
               onValueChange={handleRadiusBaseSizeChange}
-              id="baseSizeSelect"
+              // id="baseSizeSelect"
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={selectedRadiusSize.baseSize.toString()} />
@@ -64,7 +64,7 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
             <Label htmlFor="multiplierSizeSelect">Select multiplier size</Label>
             <Select
               onValueChange={handleRadiusMultiplierSizeChange}
-              id="multiplierSizeSelect"
+              // id="multiplierSizeSelect"
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={selectedRadiusSize.multiplier.toString()} />

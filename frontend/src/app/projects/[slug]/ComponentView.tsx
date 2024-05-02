@@ -129,7 +129,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                     </div>
                     <div className="col-span-2 px-4">
                       <EditComponentStyle
-                        type="button"
+                        // type="button"
                         componentsStyles={componentsStyles}
                         componentStyle={component}
                         setComponentsStyles={setComponentsStyles}
@@ -154,7 +154,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                     <Input style={component} defaultValue={component.label} />
                     <div className="col-span-2 px-4">
                       <EditComponentStyle
-                        type="input"
+                        // type="input"
                         componentsStyles={componentsStyles}
                         componentStyle={component}
                         setComponentsStyles={setComponentsStyles}
@@ -231,7 +231,9 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                     key={idx}
                     className="mb-8 grid grid-cols-3 gap-4 items-center pl-4"
                   >
-                    <Select style={component}>
+                    <Select 
+                      // style={component}
+                    >
                       <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Theme" />
                       </SelectTrigger>

@@ -133,7 +133,7 @@ export default function Project({ params }) {
     <div>
       <div className="w-10/12 mx-auto mt-10">
         <div className="mb-4 flex justify-between items-center">
-          <p className="text-2xl font-bold">Current Project: {project?.name}</p>
+          <p className="text-2xl font-bold">Current Project: {(project as any)?.name}</p>
           <div className="flex items-center gap-4">
             {isAutosaving ? (
               <div className="flex justify-center items-center">
@@ -184,8 +184,8 @@ export default function Project({ params }) {
           <TabsContent value="color" className="grid grid-cols-4 gap-4">
             <ColorsTab
               id={id}
-              project={project}
-              setProject={setProject}
+              // project={project}
+              // setProject={setProject}
               colors={colors}
               setColors={setColors}
               selectedColor={selectedColor}
