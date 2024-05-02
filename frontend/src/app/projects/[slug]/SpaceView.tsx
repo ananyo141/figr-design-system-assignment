@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Label } from "@radix-ui/react-label";
 import {
   Select,
@@ -8,6 +9,11 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import VariableTable from "./VariableView";
+
+const cardVariant = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
 
 function generateSpacingVariables(base) {
   const scale = {
@@ -39,36 +45,58 @@ const SpacingTab = ({ enums, selectedSpacingSize, setSelectedSpacingSize }) => {
 
   return (
     <>
-      <Card className="col-span-1 shadow-lg">
-        <CardHeader className="p-2 rounded-t">
-          <CardTitle className="text">Spacing</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1 h-[400px] p-4">
-          <Label htmlFor="name" className="text-lg">Select base size</Label>
-          <Select
-            onValueChange={(value) => {
-              handleBaseSizeChange(value);
-            }}
-          >
-            <SelectTrigger className="w-[180px] bg-gray-100 p-2 rounded">
-              <SelectValue placeholder={selectedSpacingSize} />
-            </SelectTrigger>
-            <SelectContent className="bg-white border border-gray-200 rounded shadow-lg">
-              {enums &&
-                enums?.spacingBaseSize.map((size, idx) => {
-                  return (
-                    <SelectItem value={size} key={idx} className="p-2 hover:bg-gray-100">
-                      {size}
-                    </SelectItem>
-                  );
-                })}
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
-      <Card className="col-span-3 shadow-lg">
-        <VariableTable sizeVariables={sizeVariables} />
-      </Card>
+      <motion.div
+        className="col-span-1 "
+        initial="hidden"
+        animate="visible"
+        variants={cardVariant}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="col-span-1 ">
+          <CardHeader className="p-2 rounded-t">
+            <CardTitle className="text">Spacing</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1 h-[400px] p-4">
+            <Label htmlFor="name" className="text-lg">
+              Select base size
+            </Label>
+            <Select
+              onValueChange={(value) => {
+                handleBaseSizeChange(value);
+              }}
+            >
+              <SelectTrigger className="w-[180px] bg-gray-100 p-2 rounded">
+                <SelectValue placeholder={selectedSpacingSize} />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 rounded shadow-lg">
+                {enums &&
+                  enums?.spacingBaseSize.map((size, idx) => {
+                    return (
+                      <SelectItem
+                        value={size}
+                        key={idx}
+                        className="p-2 hover:bg-gray-100"
+                      >
+                        {size}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+      </motion.div>
+      <motion.div
+        className="col-span-3 "
+        initial="hidden"
+        animate="visible"
+        variants={cardVariant}
+        transition={{ duration: 0.5, delay: 0.3 }} // Adding a delay for the second card
+      >
+        <Card className="col-span-3 ">
+          <VariableTable sizeVariables={sizeVariables} />
+        </Card>
+      </motion.div>
     </>
   );
 };

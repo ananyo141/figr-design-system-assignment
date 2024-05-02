@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Label } from "@radix-ui/react-label";
 import {
   Select,
@@ -9,6 +10,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import VariableTable from "./VariableView";
 import { generateRadiusVariables } from "@/lib/utils";
+
+// Animation variants
+const cardVariant = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 }
+};
 
 const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
   const sizeVariables = generateRadiusVariables(selectedRadiusSize);
@@ -23,6 +30,13 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
 
   return (
     <>
+ <motion.div
+      className="col-span-1"
+      initial="hidden"
+      animate="visible"
+      variants={cardVariant}
+      transition={{ duration: 0.5 }}
+    >
       <Card className="col-span-1">
         <CardHeader>
           <CardTitle>Radius Configuration</CardTitle>
@@ -66,9 +80,18 @@ const RadiusTab = ({ enums, selectedRadiusSize, setSelectedRadiusSize }) => {
           </div>
         </CardContent>
       </Card>
+      </motion.div>
+  <motion.div
+      className="col-span-3"
+      initial="hidden"
+      animate="visible"
+      variants={cardVariant}
+      transition={{ duration: 0.5, delay: 0.2 }} // Adding a staggered delay for the second card
+    >
       <Card className="col-span-3">
         <VariableTable sizeVariables={sizeVariables} />
       </Card>
+      </motion.div>
     </>
   );
 };

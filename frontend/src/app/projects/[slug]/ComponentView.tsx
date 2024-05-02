@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import {
   Select,
   SelectContent,
@@ -25,7 +26,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
       const componentStyles = generateComponentStyles(
         colors,
         selectedSpacingSize,
-        selectedRadiusSize
+        selectedRadiusSize,
       );
       setComponentsStyles(componentStyles);
     }
@@ -35,7 +36,11 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
     <>
       <Card className="col-span-1">
         <CardContent className="p-0 h-[400px]">
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             className={`space-y-1 p-4 cursor-pointer ${
               selectedComponent === "Button"
                 ? "bg-blue-500 text-white font-medium"
@@ -44,7 +49,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
             onClick={() => setSelectedComponent("Button")}
           >
             Button
-          </div>
+          </motion.div>
           <hr />
           <div
             className={`space-y-1 p-4 cursor-pointer ${
@@ -94,7 +99,11 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
       </Card>
       <Card className="col-span-3 p-4">
         <ScrollArea className="h-[400px]">
-          <div
+          <motion.div
+            initial={{ x: "-100%", opacity: 0 }}
+            animate={{ x: "0%", opacity: 1 }}
+            exit={{ x: "-100%", opacity: 0 }}
+            transition={{ duration: 0.3 }}
             style={{
               display: selectedComponent === "Button" ? "block" : "none",
             }}
@@ -106,7 +115,10 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                     key={idx}
                     className="mb-8 grid grid-cols-3 gap-4 items-center"
                   >
-                    <Button style={component} className="col-span-1">
+                    <Button
+                      style={component}
+                      className="w-40 active:scale-90 duration-100 transition col-span-1"
+                    >
                       {component.label}
                     </Button>
                     <div className="col-span-2 px-4">
@@ -120,7 +132,7 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
                   </div>
                 );
               })}
-          </div>
+          </motion.div>
           <div
             style={{
               display: selectedComponent === "Input-Text" ? "block" : "none",
@@ -153,17 +165,17 @@ const ComponentTab = ({ colors, selectedSpacingSize, selectedRadiusSize }) => {
           >
             <div className="flex mt-32 w-full items-center justify-center">
               <RadioGroup defaultValue="comfortable">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="default" id="r1" />
-                  <Label htmlFor="r1">Default</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="comfortable" id="r2" />
-                  <Label htmlFor="r2">Comfortable</Label>
-                </div>
+                {/* <div className="flex items-center space-x-2"> */}
+                {/*   <RadioGroupItem value="default" id="r1" /> */}
+                {/*   <Label htmlFor="r1">Default</Label> */}
+                {/* </div> */}
+                {/* <div className="flex items-center space-x-2"> */}
+                {/*   <RadioGroupItem value="comfortable" id="r2" /> */}
+                {/*   <Label htmlFor="r2">Comfortable</Label> */}
+                {/* </div> */}
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="compact" id="r3" />
-                  <Label htmlFor="r3">Compact</Label>
+                  <Label htmlFor="r3">Radio</Label>
                 </div>
               </RadioGroup>
             </div>

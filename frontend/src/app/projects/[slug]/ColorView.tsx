@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -18,6 +19,11 @@ interface Color {
   label: string;
   value: string;
 }
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const ColorsTab = ({
   id,
@@ -96,112 +102,128 @@ const ColorsTab = ({
 
   return (
     <div className="flex col-span-4 gap-4 p-4">
-      <Card className="w-1/2 shadow-xl">
-        <CardHeader className="flex flex-row items-center justify-between bg-gray-100 p-2 rounded-t">
-          <CardTitle className="font-semibold">Colors</CardTitle>
-          <Button
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded p-1"
-            onClick={handleAddColor}
-          >
-            Add Color
-          </Button>
-        </CardHeader>
-        <ScrollArea className="h-[400px]">
-          <CardContent className="space-y-1 p-2">
-            <Accordion type="single" collapsible>
-              {colors &&
-                colors.map((color: Color) => {
-                  return (
-                    <AccordionItem key={color._id} value={color._id}>
-                      <AccordionTrigger className="flex justify-between p-2 rounded">
-                        <span
-                          // key={"project-" + index}
-                          className="inline rounded-full h-4 w-4 mr-2"
-                          style={{ backgroundColor: color.value }}
-                        />
-                        {color.label}
-                      </AccordionTrigger>
-                      <AccordionContent className="bg-gray-100 p-2">
-                        <div className="mb-2">
-                          <Label htmlFor={`variable-name-${color._id}`}>
-                            Variable Name
-                          </Label>
-                          <Input
-                            id={`variable-name-${color._id}`}
-                            type="text"
-                            value={color.label}
-                            onChange={(e) => {
-                              handleColorVariableNameChange({
-                                id: color._id,
-                                varibleName: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                        <div className="mb-2">
-                          <Label htmlFor={`hex-code-${color._id}`}>
-                            Hex Code
-                          </Label>
-                          <Input
-                            id={`hex-code-${color._id}`}
-                            type="text"
-                            value={color.value}
-                            onChange={(e) => {
-                              handleColorValueChange({
-                                id: color._id,
-                                hexValue: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-            </Accordion>
-          </CardContent>
-        </ScrollArea>
-      </Card>
-      <Card className="w-full shadow-xl h-[500px]">
-        <CardHeader className="bg-gray-100 p-2 rounded-t">
-          <CardTitle className="font-semibold">Preview</CardTitle>
-        </CardHeader>
-        <CardContent className="flex justify-center items-center h-full">
-          <div className="w-3/4 h-3/4 flex items-center justify-center rounded-sm bg-gray-300 p-4">
-            <div
-              className="w-full h-full rounded-sm text-center"
-              style={{ backgroundColor: selectedColor?.value }}
+      <motion.div
+        className="w-1/2 shadow-xl"
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="w-1/2 shadow-xl">
+          <CardHeader className="flex flex-row items-center justify-between bg-gray-100 p-2 rounded-t">
+            <CardTitle className="font-semibold">Colors</CardTitle>
+            <Button
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded p-1"
+              onClick={handleAddColor}
             >
-              <div className="p-2 m-2 bg-white rounded-sm shadow-md">
-                <span>{selectedColor?.label}</span>
-                <div className="text-sm">{selectedColor?.value}</div>
+              Add Color
+            </Button>
+          </CardHeader>
+          <ScrollArea className="h-[400px]">
+            <CardContent className="space-y-1 p-2">
+              <Accordion type="single" collapsible>
+                {colors &&
+                  colors.map((color: Color) => {
+                    return (
+                      <AccordionItem key={color._id} value={color._id}>
+                        <AccordionTrigger className="flex justify-between p-2 rounded">
+                          <span
+                            // key={"project-" + index}
+                            className="inline rounded-full h-4 w-4 mr-2"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          {color.label}
+                        </AccordionTrigger>
+                        <AccordionContent className="bg-gray-100 p-2">
+                          <div className="mb-2">
+                            <Label htmlFor={`variable-name-${color._id}`}>
+                              Variable Name
+                            </Label>
+                            <Input
+                              id={`variable-name-${color._id}`}
+                              type="text"
+                              value={color.label}
+                              onChange={(e) => {
+                                handleColorVariableNameChange({
+                                  id: color._id,
+                                  varibleName: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <div className="mb-2">
+                            <Label htmlFor={`hex-code-${color._id}`}>
+                              Hex Code
+                            </Label>
+                            <Input
+                              id={`hex-code-${color._id}`}
+                              type="text"
+                              value={color.value}
+                              onChange={(e) => {
+                                handleColorValueChange({
+                                  id: color._id,
+                                  hexValue: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+              </Accordion>
+            </CardContent>
+          </ScrollArea>
+        </Card>
+      </motion.div>
+      <motion.div
+        className="w-full shadow-xl h-[500px]"
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        transition={{ duration: 0.5, delay: 0.2 }} // adding a delay for the second card
+      >
+        <Card className="w-full shadow-xl h-[500px]">
+          <CardHeader className="bg-gray-100 p-2 rounded-t">
+            <CardTitle className="font-semibold">Preview</CardTitle>
+          </CardHeader>
+          <CardContent className="flex justify-center items-center h-full">
+            <div className="w-3/4 h-3/4 flex items-center justify-center rounded-sm bg-gray-300 p-4">
+              <div
+                className="w-full h-full rounded-sm text-center"
+                style={{ backgroundColor: selectedColor?.value }}
+              >
+                <div className="p-2 m-2 bg-white rounded-sm shadow-md">
+                  <span>{selectedColor?.label}</span>
+                  <div className="text-sm">{selectedColor?.value}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex overflow-y-auto flex-col h-full mb-16">
-            {colors &&
-              colors.map((color: Color) => {
-                if (color._id === selectedColor._id) return null;
-                return (
-                  <div
-                    key={color._id}
-                    className="flex items-center justify-center rounded-sm p-4"
-                  >
+            <div className="flex overflow-y-auto flex-col h-full mb-16">
+              {colors &&
+                colors.map((color: Color) => {
+                  if (color._id === selectedColor._id) return null;
+                  return (
                     <div
-                      className="w-full h-full rounded-sm text-center"
-                      style={{ backgroundColor: color.value }}
+                      key={color._id}
+                      className="flex items-center justify-center rounded-sm p-4"
                     >
-                      <div className="p-2 m-2 bg-white rounded-sm shadow-md">
-                        <span>{color.label}</span>
-                        <div className="text-sm">{color.value}</div>
+                      <div
+                        className="w-full h-full rounded-sm text-center"
+                        style={{ backgroundColor: color.value }}
+                      >
+                        <div className="p-2 m-2 bg-white rounded-sm shadow-md">
+                          <span>{color.label}</span>
+                          <div className="text-sm">{color.value}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-          </div>
-        </CardContent>
-      </Card>
+                  );
+                })}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 };
