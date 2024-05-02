@@ -62,7 +62,7 @@ async function init() {
     }
 }
 exports.default = init;
-init();
+// init();
 /**
  * Event listener for HTTP server "error" event.
  */
